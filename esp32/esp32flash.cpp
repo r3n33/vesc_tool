@@ -114,7 +114,7 @@ bool Esp32Flash::disconnectEsp()
     return true;
 }
 
-bool Esp32Flash::flashFirmware(QByteArray data, size_t address)
+bool Esp32Flash::flashFirmware(QByteArray data, quint64 address)
 {
 #ifdef HAS_SERIALPORT
     if (!sPort->isOpen()) {
@@ -187,7 +187,7 @@ bool Esp32Flash::flashFirmware(QByteArray data, size_t address)
 #endif
 }
 
-bool Esp32Flash::eraseFlash(size_t size, size_t address)
+bool Esp32Flash::eraseFlash(quint64 size, quint64 address)
 {
 #ifdef HAS_SERIALPORT
     esp_loader_error_t err = esp_loader_flash_start(address, size, 1024);
@@ -242,6 +242,17 @@ target_chip_t Esp32Flash::getTarget()
 #else
     return ESP_UNKNOWN_CHIP;
 #endif
+}
+
+QByteArray Esp32Flash::readAllFromFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+    QByteArray data = file.readAll();
+    file.close();
+    return data;
 }
 
 #ifdef HAS_SERIALPORT
