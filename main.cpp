@@ -319,6 +319,7 @@ int main(int argc, char *argv[])
     bool bridgeAppData = false;
     bool offscreen = false;
     bool downloadPackageArchive = false;
+    bool noWindowManager = false;
 
     // Arguments can be hard-coded in a build like this:
 //    qmlWindowSize = QSize(400, 800);
@@ -686,6 +687,13 @@ int main(int argc, char *argv[])
 
         if (str == "--downloadPackageArchive") {
             downloadPackageArchive = true;
+            found = true;
+        }
+
+        if (str == "--noWindowManager") {
+            QSettings().setValue("introVersion", VT_INTRO_VERSION);
+            QSettings().setValue("intro_done", true); // TODO: Testing a bypass for StartupWizard
+            noWindowManager = true;
             found = true;
         }
 
